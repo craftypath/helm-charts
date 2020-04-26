@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "sops-operator.fullname" . }}
+  {{- with .Values.deployment.annotations }}
+  annotations:
+    {{- toYaml . | nindent 8 }}
+  {{- end }}
+  labels:
+    {{- include "sops-operator.labels" . | nindent 4 }}
+    {{- with .Values.deployment.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      {{- include "sops-operator.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- if or .Values.secret.stringData .Values.pod.annotations }}
+      annotations:
+      {{- if .Values.secret.stringData }}
+        sops-operator/secret-hash: "{{ include (print .Template.BasePath "/secret.yaml") . | sha256sum }}"
+      {{- end }}
+      {{- with .Values.pod.annotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      labels:
+        {{- include "sops-operator.selectorLabels" . | nindent 8 }}
+        {{- with .Values.pod.labels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "sops-operator.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: sops-operator
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: WATCH_NAMESPACE
+              value: {{ if .Values.rbac.clusterScoped }}{{ .Values.watchNamespace }}{{ else }}{{ .Release.Namespace }}{{ end }}
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: sops-operator
+          {{- with .Values.env }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if not .Values.secret.mountPath }}
+          {{- if or .Values.secret.stringData .Values.secret.existingSecret }}
+          envFrom:
+            - secretRef:
+                name: {{ include "sops-operator.secretName" . }}
+          {{- end }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.secret.mountPath }}
+          volumeMounts:
+            - mountPath: {{ . }}
+              name: secrets
+              readOnly: true
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.secret.mountPath }}
+      volumes:
+        - name: secrets
+          secret:
+            secretName: {{ include "sops-operator.secretName" $ }}
+      {{- end }}

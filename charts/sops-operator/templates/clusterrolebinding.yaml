@@ -1,0 +1,18 @@
+{{- if .Values.rbac.create }}
+kind: {{ include "sops-operator.roleKind" . }}Binding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "sops-operator.fullname" . }}
+  labels:
+    {{- include "sops-operator.labels" . | nindent 4 }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "sops-operator.serviceAccountName" . }}
+  {{- if .Values.rbac.clusterScoped }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+roleRef:
+  kind: {{ include "sops-operator.roleKind" . }}
+  name: {{ include "sops-operator.fullname" . }}
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}

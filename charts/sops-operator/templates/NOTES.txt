@@ -1,0 +1,10 @@
+Sops Operator successfully installed! 🎉
+
+Operator scope: {{ if .Values.rbac.clusterScoped }}Cluster{{ else }}Namespace{{ end }}
+Watched namespaces: {{ default "all" | print .Values.watchNamespace }}
+{{- with .Values.secret.existingSecret }}
+Using existing secret: {{ . }}
+{{- end }}
+
+Check the logs:
+kubectl logs -f -l app.kubernetes.io/instance={{ .Release.Name }} -l app.kubernetes.io/name={{ include "sops-operator.name" . }} -n {{ .Release.Namespace }}

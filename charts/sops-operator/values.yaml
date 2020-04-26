@@ -1,0 +1,85 @@
+replicas: 1
+
+image:
+  repository: craftypath/sops-operator
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart version.
+  tag: ""
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: true
+  clusterScoped: true
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+deployment:
+  # Additional labels for the deployment
+  labels: {}
+  # Annotations for the deployment
+  annotations: {}
+
+pod:
+  # Additional labels for the pod
+  labels: {}
+  # Annotations for the pod
+  annotations: {}
+
+# The security context for the pod
+podSecurityContext:
+  fsGroup: 1000
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+
+# The security context for the container. The defaults which are commented out below so
+# they can be overridden are set as specified if nothing else configured
+containerSecurityContext:
+  readOnlyRootFilesystem: true
+  privileged: false
+  allowPrivilegeEscalation: false
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # requests:
+  #   cpu: 50m
+  #   memory: 32Mi
+  # limits:
+  #   cpu: 50m
+  #   memory: 32Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+secret:
+  # The name of an existing secret to use
+  existingSecret: ""
+  # Additional labels for the secret
+  labels: {}
+  # Annotations for the seret
+  annotations: {}
+  # If set, a secret is created that should configure access to the cloud provider's KMS
+  stringData: {}
+  # If set, the secret is mounted at this path. If left empty, environment variables are created from the secret
+  mountPath: ""
+
+env: []
+
+# A comma-separated list of namespaces to watch. Leave empty to watch all namespaces
+watchNamespace: ""
