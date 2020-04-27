@@ -1,0 +1,8 @@
+.idea
+*.iml
+.project
+.history
+.settings
+.deploy
+charts/**/charts
+.cr-*
