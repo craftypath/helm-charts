@@ -6,3 +6,9 @@
 
 [Helm 3](https://helm.sh) must be installed and initialized to use the charts.
 Please refer to Helm's [documentation](https://helm.sh/docs/) to get started.
+
+Once Helm is set up properly, add the repo as follows:
+
+```console
+$ helm repo add craftypath https://craftypath.github.io/helm-charts
+```
