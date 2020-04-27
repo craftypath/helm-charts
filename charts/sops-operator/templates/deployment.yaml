@@ -65,6 +65,10 @@ spec:
                 name: {{ include "sops-operator.secretName" . }}
           {{- end }}
           {{- end }}
+          readinessProbe:
+            httpGet:
+              port: 8686
+              path: /metrics
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.secret.mountPath }}
