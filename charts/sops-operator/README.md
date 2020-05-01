@@ -41,13 +41,15 @@ Parameter | Description | Default
 ## Configuring Cloud Provider Credentials
 
 The SOPS Operator Helm chart allows for fairly flexible credentials configuration.
+
+The following examples show how SOPS Operator can be configured for AWS, Azure, and GCP using credentials configured via secret.
+It should also be possible to use managed identities, but this has not been tested yet.
+Whatever SOPS supports should be possible.
 Please refer to the [SOPS documentation](https://github.com/mozilla/sops) to find out what is required for your cloud provider.
 
-So far, SOPS Operator has been tested with AWS KMS.
+### AWS
 
-### AWS Examples
-
-#### Using Environment Variables
+**Using Environment Variables**
 
 If `secret.mountPath` is not set, environment variables are created from the secret.
 
@@ -58,7 +60,7 @@ secret:
     AWS_SECRET_ACCESS_KEY=random+access+key+0123456789abcdef+12345
 ```
 
-#### Using a Credentials File
+**Using a Credentials File**
 
 If `secret.mountPath` is set, the secret is mounted to the specified path.
 If necessary, environment variables, such as `AWS_DEFAULT_REGION` or `AWS_SHARED_CREDENTIALS_FILE`, can be configured.
@@ -75,4 +77,38 @@ secret:
 env:
   - name: AWS_DEFAULT_REGION
     value: eu-central-1
+```
+
+### Azure
+
+```yaml
+secret:
+  stringData:
+    AZURE_TENANT_ID: 12345678-1234-5678-1234-12345678
+    AZURE_CLIENT_ID: 12345678-1234-5678-1234-1234567890ab
+    AZURE_CLIENT_SECRET: 12345678-1234-5678-1234-1234567890ab
+```
+
+### GCP
+
+```yaml
+secret:
+  mountPath: /home/sops-operator/.google/credentials.json
+  stringData: |
+    {
+      "type": "service_account",
+      "project_id": "myproject",
+      "private_key_id": "1234567890123456789012345678901234567890",
+      "private_key": "-----BEGIN PRIVATE KEY....==\n-----END PRIVATE KEY-----\n",
+      "client_email": "sops-operator@myproject.iam.gserviceaccount.com",
+      "client_id": "123456789012345678901",
+      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+      "token_uri": "https://oauth2.googleapis.com/token",
+      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+      "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sops-operator@myproject.iam.gserviceaccount.com"
+    }
+
+env:
+  - name: GOOGLE_APPLICATION_CREDENTIALS
+    value: /home/sops-operator/.google/credentials.json
 ```
