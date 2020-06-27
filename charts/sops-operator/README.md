@@ -19,7 +19,7 @@ Parameter | Description | Default
 `rbac.create` | Specifies whether RBAC resources should be created | `false`
 `rbac.clusterScoped` | Custom RBAC rules for the master pod. If not specified, the `cluster-admin` ClusterRole is used | `true`
 `serviceAccount.create` | Specifies whether a service account should be created | `true`
-`serviceAccount.name` | If not set and ´serviceAcount.create` is true, a name is generated using the fullname template | `""`
+`serviceAccount.name` | If not set and `serviceAcount.create` is true, a name is generated using the fullname template | `""`
 `deployment.labels` | Additional labels for the deployment | `{}`
 `deployment.annotations` | Annotations for the deployment | `{}`
 `pod.labels` | Additional labels for the pod | `{}`
@@ -33,9 +33,9 @@ Parameter | Description | Default
 `watchNamespace`| A comma-separated list of namespaces to watch. Leave empty to watch all namespaces. Ignored if `rbac.clusterScoped` is set to `false` | ``
 `secret.existingSecret` | The name of an existing secret to use | ``
 `secret.labels` | Additional labels for the secret | ``
-`secret.annotations` | Annotations for the seret | ``
-`secret.stringData` | If set, a secret is created that should configure access to the cloud provider's KMS | `{}`
-`secret.mountPath` | If set, the secret is mounted at this path. If left empty, environment variables are created from the secret. | `""`
+`secret.annotations` | Annotations for the secret | ``
+`secret.stringData` | If set, a secret is created that configures access to the cloud provider's KMS | `{}`
+`secret.mountPath` | If set, the secret is mounted at this path. If left empty, environment variables are created from the secret | `""`
 `env` | A list of additional environment variables | `[]`
 
 ## Configuring Cloud Provider Credentials
