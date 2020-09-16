@@ -48,7 +48,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: WATCH_NAMESPACE
-              value: {{ if .Values.rbac.clusterScoped }}{{ .Values.watchNamespace }}{{ else }}{{ .Release.Namespace }}{{ end }}
+              value: "{{ if .Values.rbac.clusterScoped }}{{ .Values.watchNamespace }}{{ else }}{{ .Release.Namespace }}{{ end }}"
             - name: POD_NAME
               valueFrom:
                 fieldRef:
