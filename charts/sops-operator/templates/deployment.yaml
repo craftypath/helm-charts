@@ -65,9 +65,16 @@ spec:
                 name: {{ include "sops-operator.secretName" . }}
           {{- end }}
           {{- end }}
+          ports:
+            - name: http-metrics
+              containerPort: 8383
+              protocol: TCP
+            - name: cr-metrics
+              containerPort: 8686
+              protocol: TCP
           readinessProbe:
             httpGet:
-              port: 8686
+              port: http-metrics
               path: /metrics
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
