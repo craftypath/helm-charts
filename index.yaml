@@ -3,6 +3,25 @@ entries:
   sops-operator:
   - apiVersion: v2
     appVersion: v0.7.0
+    created: "2021-02-23T19:10:18.411334315Z"
+    description: A Helm chart for SOPS Operator
+    digest: efe2eb54b16b8fe2a23c5c6a5806b2773a504057d6be65f76f6dd3aa91f23ee0
+    home: https://github.com/craftypath/sops-operator
+    keywords:
+    - SOPS
+    - KMS
+    - encryption
+    maintainers:
+    - name: craftypath team
+    name: sops-operator
+    sources:
+    - https://github.com/craftypath/helm-charts
+    type: application
+    urls:
+    - https://github.com/craftypath/helm-charts/releases/download/sops-operator-0.7.2/sops-operator-0.7.2.tgz
+    version: 0.7.2
+  - apiVersion: v2
+    appVersion: v0.7.0
     created: "2020-09-17T09:49:03.90741232Z"
     description: A Helm chart for SOPS Operator
     digest: ed8d1f3200f0310484b08618dd9866efcfcd95eda03f9705ba98275b1d30b5d1
@@ -191,4 +210,4 @@ entries:
     urls:
     - https://github.com/craftypath/helm-charts/releases/download/sops-operator-0.1.0/sops-operator-0.1.0.tgz
     version: 0.1.0
-generated: "2020-04-27T17:10:52.046560641Z"
+generated: "2021-02-23T19:10:18.411430416Z"
