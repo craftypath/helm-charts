@@ -10,9 +10,9 @@ subjects:
     name: {{ include "sops-operator.serviceAccountName" . }}
     {{- if .Values.rbac.clusterScoped }}
     namespace: {{ .Release.Namespace }}
-  {{- end }}
+    {{- end }}
 roleRef:
   kind: {{ include "sops-operator.roleKind" . }}
   name: {{ include "sops-operator.fullname" . }}
   apiGroup: rbac.authorization.k8s.io
-  {{- end }}
+{{- end }}
