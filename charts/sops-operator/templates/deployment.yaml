@@ -49,12 +49,6 @@ spec:
           env:
             - name: WATCH_NAMESPACE
               value: "{{ if .Values.rbac.clusterScoped }}{{ .Values.watchNamespace }}{{ else }}{{ .Release.Namespace }}{{ end }}"
-            - name: POD_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: OPERATOR_NAME
-              value: sops-operator
           {{- with .Values.env }}
           {{- toYaml . | nindent 12 }}
           {{- end }}
@@ -67,15 +61,15 @@ spec:
           {{- end }}
           ports:
             - name: http-metrics
-              containerPort: 8383
+              containerPort: 8080
               protocol: TCP
-            - name: cr-metrics
-              containerPort: 8686
+            - name: http-readiness
+              containerPort: 8081
               protocol: TCP
           readinessProbe:
             httpGet:
-              port: http-metrics
-              path: /metrics
+              port: http-readiness
+              path: /readyz
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.secret.mountPath }}
